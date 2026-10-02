@@ -1,43 +1,15 @@
-<!-- mirror:start — this top section is specific to the mirror. Everything after mirror:end is the upstream README from cursor/plugins/pstack, unchanged. To sync with upstream, follow MIRROR.md. -->
-# pstack — standalone mirror
+<!-- mirror:start — this top section is specific to this fork. Everything after mirror:end is the upstream README from cursor/plugins/pstack, unchanged. To sync with upstream, run scripts/sync-upstream.sh (see MIRROR.md). -->
+# pstack — Michael Yu's fork, tracking Cursor's upstream
 
-> **Mirror** of [`cursor/plugins/pstack`](https://github.com/cursor/plugins/tree/main/pstack) — kept in sync for standalone use.
-> Works in Claude Code, Codex, Pi, and other agents, not only Cursor.
-> See also [`backnotprop/bro`](https://github.com/backnotprop/bro), referenced by the [`/bro`](./skills/bro/SKILL.md) skill.
+> Fork of [`cursor/plugins/pstack`](https://github.com/cursor/plugins/tree/main/pstack) by poteto (Lauren Tan), MIT.
+> Translated to run in Claude Code and Codex as well as Cursor. Translation edits come from
+> [`backnotprop/pstack`](https://github.com/backnotprop/pstack); upstream syncs come straight from Cursor's repo.
+> Current upstream: see the latest commit on the `upstream` branch.
 
+This fork exists so one person's workflow OS depends on Cursor's maintained original, not on a
+third-party mirror staying alive. `MIRROR.md` has the sync procedure and the substitution map.
 Cursor's original README is [further down this page](#pstack).
 
-## Install
-
-pstack is a folder of plain [Agent Skills](https://agentskills.io) (`skills/<name>/SKILL.md`). You don't need Cursor. The [`skills` CLI](https://skills.sh) installs them into Claude Code, Codex, Pi, Cursor, OpenCode, and other agents:
-
-```bash
-npx skills add backnotprop/pstack
-```
-
-The CLI shows every skill in a list you can search. Select the skills you want, then select your agents.
-
-## Skills
-
-These skills don't call other pstack skills, so each one works alone:
-
-`unslop`, `bro`, `how`, `tdd`, `typescript-best-practices`, `arena`, `swarm`, `interrogate`, `reflect`, `show-me-your-work`, `figure-it-out`, `automate-me`
-
-Some skills call other skills. Install these together:
-
-| Skill | Also install |
-|---|---|
-| `teach` | `how`, `why` |
-| `why` | `how` |
-| `technical-writing` | `unslop` |
-| `architect` | `arena`, `how` |
-| `blast-radius` | `arena`, `how`, `why`, `unslop` |
-| `create-verification-skill` | `maintain-verification-skill` |
-| `poteto-mode` | all `principle-*` skills and most of the other skills |
-
-## What this mirror changes
-
-Many skills were Cursor-specific. They've been rewritten to work in any harness.
 <!-- mirror:end -->
 
 ---

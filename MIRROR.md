@@ -1,47 +1,44 @@
-# Syncing this mirror
+# Syncing this fork with Lauren Tan's pstack
 
-This repo mirrors [`cursor/plugins/pstack`](https://github.com/cursor/plugins/tree/main/pstack) and adds its own edits: the top of `README.md` and harness-neutral rewrites in some skills.
+This repository is Michael Yu's fork of [`cursor/plugins/pstack`](https://github.com/cursor/plugins/tree/main/pstack)
+(MIT, by poteto / Lauren Tan), translated so the skills run in Claude Code and Codex as well as Cursor.
+It began as a fork of [`backnotprop/pstack`](https://github.com/backnotprop/pstack), whose harness-neutral
+rewrites it keeps. Upstream is Cursor's repository, not backnotprop.
 
-Two branches keep those edits safe:
+Two branches keep the translation safe:
 
-- `upstream` holds Cursor's files exactly, with no local edits.
-- `main` is `upstream` plus this mirror's edits.
+- `upstream` holds Cursor's `pstack/` folder exactly, with no local edits. Each commit names the Cursor commit it copies.
+- `main` is `upstream` plus the translation edits.
 
 Never copy Cursor's files onto `main` directly. That erases the edits.
 
-## Steps
+## Sync
 
-1. Copy Cursor's latest `pstack/` folder onto the `upstream` branch:
+```bash
+scripts/sync-upstream.sh            # fetch Cursor's latest, update `upstream`, merge into `main`
+scripts/sync-upstream.sh --check    # report only: is Cursor ahead of our `upstream` branch?
+```
 
-   ```bash
-   git clone --depth 1 --filter=blob:none --sparse https://github.com/cursor/plugins.git /tmp/cursor-plugins
-   git -C /tmp/cursor-plugins sparse-checkout set pstack
-   git switch upstream
-   rsync -a --delete --exclude .git --exclude MIRROR.md /tmp/cursor-plugins/pstack/ ./
-   git add -A
-   git commit -m "upstream: cursor/plugins/pstack @ $(git -C /tmp/cursor-plugins rev-parse --short HEAD)"
-   ```
+The script stops on a merge conflict. A conflict means Cursor changed a line this fork also changed.
+Keep Cursor's new meaning and reapply the harness-neutral wording, then `git add -A && git commit`.
+After every sync, read the script's "new Cursor-only instructions" report and rewrite any hits the way
+the existing edits do. The Harness section in `skills/poteto-mode/SKILL.md` lists the mappings. Then
+refresh the bundled Comment Sicko prompt:
 
-2. Merge it into `main`. Git applies only what changed upstream and keeps the mirror's edits:
+```bash
+cp agents/comment-sicko.md skills/no-comments/references/comment-sicko.md
+git push origin main upstream
+```
 
-   ```bash
-   git switch main
-   git merge upstream
-   ```
+## Translation rules (the substitution map)
 
-   A conflict means Cursor changed a line this mirror also changed. Keep Cursor's new meaning and reapply the harness-neutral wording.
-
-3. Refresh the bundled Comment Sicko prompt, then check that no new Cursor-only instructions arrived:
-
-   ```bash
-   cp agents/comment-sicko.md skills/no-comments/references/comment-sicko.md
-   git diff upstream@{1} upstream -- skills | grep -nE '\.cursor/|agent-transcripts|cursor-team-kit|create-skill|Task'
-   ```
-
-   Rewrite any new hits the same way as the existing edits. The Harness section in `skills/poteto-mode/SKILL.md` lists the mappings.
-
-4. Push both branches:
-
-   ```bash
-   git push origin main upstream
-   ```
+| Upstream (Cursor) | Here |
+|---|---|
+| `~/.cursor/rules/pstack-models.mdc` | "the pstack settings file (`~/.cursor/rules/pstack-models.mdc` in Cursor, `~/.agents/pstack-models.md` in other harnesses)" |
+| `Task` tool, `subagent_type: generalPurpose` | kept, with an **Other harnesses** paragraph mapping to `Agent` (Claude Code), `spawn_agent` (Codex), `task` (OpenCode) |
+| Cursor cloud agents (`environment: "cloud"`) | local subagents, one worktree or output path each |
+| `agent-transcripts/` | per-harness session directories, listed in `show-me-your-work` |
+| `.cursor/skills/`, `~/.cursor/skills/` | `.claude/skills/`, `.agents/skills/`, and user equivalents |
+| `AskQuestion` | "your structured-question tool" (`AskUserQuestion` in Claude Code) |
+| `deslop`, `control-ui`, `control-cli`, `create-skill` | `unslop`, the project's `verify-<app>` skill, and the agentskills.io format |
+| Graphite / Origin CLI | kept verbatim, gated on `command -v origin`; `gh` is the default |
