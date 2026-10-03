@@ -42,3 +42,4 @@ git push origin main upstream
 | `AskQuestion` | "your structured-question tool" (`AskUserQuestion` in Claude Code) |
 | `deslop`, `control-ui`, `control-cli`, `create-skill` | `unslop`, the project's `verify-<app>` skill, and the agentskills.io format |
 | Graphite / Origin CLI | kept verbatim, gated on `command -v origin`; `gh` is the default |
+| `name: Poteto Mode`, `name: Make Bot UI` (display names with spaces) | `name: poteto-mode`, `name: make-bot-ui`. Claude Code requires lowercase-hyphen skill names equal to the directory; the desktop app otherwise registers no usable slash command. |
