@@ -20,7 +20,7 @@ if diff -rq --exclude MIRROR.md --exclude scripts "$tmp/plugins/pstack" "$tmp/ou
   echo "current: upstream branch matches cursor/plugins/pstack ($remote_ver @ $remote_sha; ours @ ${local_sha:-?})"; exit 0
 fi
 echo "ahead:   cursor/plugins/pstack is $remote_ver @ $remote_sha; our upstream branch is @ ${local_sha:-?}"
-diff -rq --exclude MIRROR.md --exclude scripts "$tmp/plugins/pstack" "$tmp/ours" | sed 's|'"$tmp"'/plugins/pstack/||; s|'"$tmp"'/ours/||' | head -60
+{ diff -rq --exclude MIRROR.md --exclude scripts "$tmp/plugins/pstack" "$tmp/ours" || true; } | sed 's|'"$tmp"'/plugins/pstack/||; s|'"$tmp"'/ours/||' | head -60
 [ $check = 1 ] && exit 1
 
 [ -z "$(git -C "$ROOT" status --porcelain)" ] || { echo "working tree not clean; commit or stash first" >&2; exit 2; }
