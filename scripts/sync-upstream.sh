@@ -37,7 +37,7 @@ echo "ahead:   cursor/plugins/pstack is $remote_ver @ $remote_sha; our upstream 
 [ -z "$(git -C "$ROOT" status --porcelain)" ] || { echo "working tree not clean; commit or stash first" >&2; exit 2; }
 start="$(git -C "$ROOT" branch --show-current)"
 git -C "$ROOT" switch --quiet upstream
-rsync -a --delete --exclude /.git/ --exclude /MIRROR.md --exclude /scripts/ "$tmp/plugins/pstack/" "$ROOT/"
+rsync -ac --delete --exclude /.git/ --exclude /MIRROR.md --exclude /scripts/ "$tmp/plugins/pstack/" "$ROOT/"
 git -C "$ROOT" add -A
 git -C "$ROOT" commit --quiet -m "upstream: cursor/plugins/pstack @ $remote_sha ($remote_ver)"
 echo "new Cursor-only instructions in this delta (rewrite per MIRROR.md):"
